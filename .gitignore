@@ -1,0 +1,11 @@
+.lab-data.env
+
+# Local .terraform directories
+**/.terraform/*
+
+# .tfstate files
+*.tfstate
+*.tfstate.*
+
+# Lock files
+**/.terraform.lock.hcl

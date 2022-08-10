@@ -1,0 +1,52 @@
+#cloud-config
+packages:
+  - bird
+  - jq
+runcmd:
+  - [wget, "https://aka.ms/InstallAzureCLIDeb", "-O", "/root/install_azcli.sh"]
+  - bash /root/install_azcli.sh
+write_files:
+  - path: /etc/bird/bird.conf
+    content: |
+      log syslog all;
+      protocol device {
+        scan time 10;
+      }
+      protocol direct {
+        disabled;
+      }
+      protocol kernel {
+        preference 254;
+        learn;
+        merge paths on;
+        import filter {
+          reject;
+        };
+        export filter {
+          reject;
+        };
+      }
+      protocol static {
+        import all;
+        route ${route_to_announce} via ${ri_vm_ip};
+      }
+      filter TO_RS {
+        bgp_next_hop = ${azfw_private_ip};
+        accept;
+      }
+      protocol bgp rs0 {
+        description "RouteServer instance 0";
+        multihop;
+        local as ${ri_asn};
+        neighbor ${rs_ip1} as 65515;
+        import filter {accept;};
+        export filter TO_RS;
+      }
+      protocol bgp rs1 {
+        description "Route Server instance 1";
+        multihop;
+        local as ${ri_asn};
+        neighbor ${rs_ip2} as 65515;
+        import filter {accept;};
+        export filter TO_RS;
+      }

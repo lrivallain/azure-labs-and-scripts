@@ -1,10 +1,8 @@
 #cloud-config
+packages_update: true
+packages_upgrade: true
 packages:
   - bird
-  - jq
-runcmd:
-  - [wget, "https://aka.ms/InstallAzureCLIDeb", "-O", "/root/install_azcli.sh"]
-  - bash /root/install_azcli.sh
 write_files:
   - path: /etc/bird/bird.conf
     content: |

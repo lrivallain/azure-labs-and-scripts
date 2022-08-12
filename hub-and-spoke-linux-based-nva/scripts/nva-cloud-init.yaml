@@ -1,0 +1,60 @@
+#cloud-config
+packages_update: true
+packages_upgrade: true
+packages:
+  - bird
+runcmd:
+  # Change SSH port to tcp:2222 (compliance requirement)
+  - sed -i "s/#Port 22/Port 2222/" /etc/ssh/sshd_config
+  - systemctl restart sshd
+  # enable ip forwarding
+  - sysctl -w net.ipv4.ip_forward=1
+  # SNAT for all traffic (outbound internet access for internal VMs)
+  - iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
+  # DNAT tcp:1222 to test VM1 tcp:2222 (testing purposes)
+  - iptables -t nat -A PREROUTING -d ${nva_vm_ip} -p tcp --dport 12222 -j DNAT --to-destination ${test_vm_ip}:2222
+write_files:
+  - path: /etc/bird/bird.conf
+    content: |
+      log syslog all;
+      router id ${nva_vm_ip};
+
+      protocol device {
+        scan time 10; # Scan interfaces every 10 seconds
+      }
+
+      # automatically generating direct routes to all network interfaces
+      protocol direct {
+        # disabled; # Enabled by default
+      }
+
+      # Forbid synchronizing BIRD routing tables with the OS kernel.
+      protocol kernel {
+        import all;  # Import to table, default is import all
+        export none; # Export to protocol. default is export none
+      }
+
+      protocol static {
+        import all;
+        route ${route_to_announce} via ${nva_gw};
+        # route 0.0.0.0/1 via ${nva_gw};
+        # route 128.0.0.0/1 via ${nva_gw};
+      }
+
+      protocol bgp rs0 {
+        description "RouteServer instance 0";
+        multihop;
+        local ${nva_vm_ip} as ${nva_asn};
+        neighbor ${rs_ip1} as 65515;
+        import filter {accept;};
+        export filter {accept;};
+      }
+
+      protocol bgp rs1 {
+        description "Route Server instance 1";
+        multihop;
+        local ${nva_vm_ip} as ${nva_asn};
+        neighbor ${rs_ip2} as 65515;
+        import filter {accept;};
+        export filter {accept;};
+      }

@@ -1,0 +1,9 @@
+#cloud-config
+packages_update: true
+packages_upgrade: true
+packages:
+  - net-tools
+runcmd:
+  # Change SSH port to tcp:2222 (compliance requirement)
+  - sed -i "s/#Port 22/Port 2222/" /etc/ssh/sshd_config
+  - systemctl restart sshd

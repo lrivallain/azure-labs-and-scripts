@@ -1,8 +1,6 @@
 # Azure labs&scripts
 
-## [hub-and-spoke-azfw-route-injection](./hub-and-spoke-azfw-route-injection)
-
-Default route injection to promote Azure Firewall as next hop
+## [Default route injection to promote Azure Firewall as next hop](./hub-and-spoke-azfw-route-injection)
 
 This set of azure resources was used to illustrate a route injection scenario for Azure VMware Solution to use Azure Firewall as its next hop.
 
@@ -11,8 +9,6 @@ This set of azure resources was used to illustrate a route injection scenario fo
 ## [Hub and spoke model using a Linux based NVA](./hub-and-spoke-linux-based-nva)
 
 A Linux based NVA to illustrate an H&S model, cross vNet and Internet connectivity.
-
-![Linux based NVA to illustrate an H&S model](./hub-and-spoke-linux-based-nva/hub-and-spoke-linux-based-nva.png)
 
 ## [Application Gateway - simple HTTP backend](./application-gateway)
 

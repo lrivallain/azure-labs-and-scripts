@@ -37,8 +37,6 @@ write_files:
       protocol static {
         import all;
         route ${route_to_announce} via ${nva_gw};
-        # route 0.0.0.0/1 via ${nva_gw};
-        # route 128.0.0.0/1 via ${nva_gw};
       }
 
       protocol bgp rs0 {

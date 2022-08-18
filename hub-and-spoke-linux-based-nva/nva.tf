@@ -21,7 +21,7 @@ resource "azurerm_network_interface" "nva" {
     name                          = "internal"
     subnet_id                     = azurerm_subnet.hub_nva_subnet.id
     private_ip_address_allocation = "Dynamic"
-    public_ip_address_id          = azurerm_public_ip.nva-pip.id # to change if using a 2 nic model
+    public_ip_address_id          = azurerm_public_ip.nva-pip.id
   }
 }
 
@@ -97,8 +97,3 @@ resource "azurerm_subnet_route_table_association" "nva-rt" {
   subnet_id      = azurerm_subnet.hub_nva_subnet.id
   route_table_id = azurerm_route_table.nva-rt.id
 }
-
-# resource "azurerm_subnet_route_table_association" "nva-rt-out" {
-#   subnet_id      = azurerm_subnet.hub_nva_out_subnet.id
-#   route_table_id = azurerm_route_table.nva-rt.id
-# }

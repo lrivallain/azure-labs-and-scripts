@@ -1,4 +1,4 @@
-#
+# Hub and spoke model using a Linux based NVA
 
 ![Linux based NVA to illustrate an H&S model](./hub-and-spoke-linux-based-nva.png)
 

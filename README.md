@@ -13,3 +13,7 @@ A Linux based NVA to illustrate an H&S model, cross vNet and Internet connectivi
 ## [Application Gateway - simple HTTP backend](./application-gateway)
 
 A basic Application Gateway with a simple HTTP backend displaying some data about the used worker (hostname, IP, etc).
+
+## [Traffic Manager - simple HTTP backend](./traffic-manager)
+
+A basic Traffic Manager with a simple HTTP backend displaying some data about the used worker (hostname, IP, etc).

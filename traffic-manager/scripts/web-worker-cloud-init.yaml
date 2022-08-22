@@ -1,0 +1,18 @@
+#cloud-config
+
+# Install packages
+packages:
+  - python3-pip
+
+# Run commands on every boot
+bootcmd:
+  - cd /opt/demo-app && git pull && nohup bash ./run.sh &
+
+# First boot
+runcmd:
+  # Install a demo app
+  - mkdir -p /opt/demo-app
+  - git clone https://github.com/lrivallain/demo-app.git /opt/demo-app
+  - cd /opt/demo-app && nohup bash ./run.sh &
+
+final_message: "The system is finally up, after $UPTIME seconds"
